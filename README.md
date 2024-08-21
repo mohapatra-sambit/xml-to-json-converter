@@ -130,7 +130,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
 
 Here is an example of a simple JSON schema (<u>of course, without the dotted lines and the numbers at the end of each line</u>):<a name="example"></a>
 
-```json
+```txt
 {
 	"ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)", (1)
 	"Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",...............................................(2)
