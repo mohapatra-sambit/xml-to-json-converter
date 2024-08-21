@@ -132,7 +132,7 @@ Here is an example of a simple JSON schema (<u>of course, without the dotted lin
 
 ```json
 {
-	"ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)",_____________________(1)
+	"ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)",-------(1)
 	"Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",...............................................(2)
 	"OrderNo": "VALUE(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",.......................................(3)
 	"Carrier": "XYZ-ABCD Logistics",.............................................................................(4)
