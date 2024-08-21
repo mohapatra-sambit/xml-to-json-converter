@@ -1,0 +1,61 @@
+{
+	"MyShipments": {
+		"Shipment": {
+			"Shipment_Key": 1202103301135561781564861,
+			"Organization": "Some Org Name",
+			"Number": 528630,
+			"Lines": {
+				"Line": [
+					{
+						"Order": {
+							"Status": 113350,
+							"Order_Key": 20210330113201178156395,
+							"Type": "COD_SHP",
+							"Order_Num": 22268086,
+							"Status_Desc": "Included In Shipment"
+						},
+						"Item": {
+							"Desc": "Shoes",
+							"Qty": 1,
+							"Id": "I1",
+							"Cost": 150.99
+						},
+						"Line_Key": 1202103301135561781564831
+					},
+					{
+						"Order": {
+							"Status": 113351,
+							"Order_Key": 20210330113201178156395,
+							"Type": "COD_SHP",
+							"Order_Num": 22268086,
+							"Status_Desc": "Included In Shipment"
+						},
+						"Item": {
+							"Desc": "Socks",
+							"Qty": 2,
+							"Id": "I2",
+							"Cost": 75.5
+						},
+						"Line_Key": 1202103301135561781564841
+					},
+					{
+						"Order": {
+							"Status": 113353,
+							"Order_Key": 20210330113201178156395,
+							"Type": "COD_SHP",
+							"Order_Num": 22268086,
+							"Status_Desc": "Included In Shipment"
+						},
+						"Item": {
+							"Desc": "Writing Pad",
+							"Qty": 3,
+							"Id": "I3",
+							"Cost": 120
+						},
+						"Line_Key": 1202103301135561781564851
+					}
+				]
+			}
+		}
+	}
+}
