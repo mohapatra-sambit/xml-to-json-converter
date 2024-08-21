@@ -91,7 +91,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
      
      - Add the entire JSON schema string as a value to this new element.
      
-     - Pass this updated XML to the API. (Refer [Javadocs](docs/index.html) here)
+     - Pass this updated XML to the API. (Refer [Javadocs](docs/) here)
      
      - **Example**,
        
@@ -116,7 +116,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
      
      - Similarly, the schema JSON can be passed as [String](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html) or [File](https://docs.oracle.com/javase/8/docs/api/java/io/File.html) or [JSONObject](https://javadoc.io/doc/org.json/json/latest/index.html) object.
      
-     - Refer [Javadocs](docs/index.html) here for the API specifications.
+     - Refer [Javadocs](docs/) here for the API specifications.
 
 3- **Structure Mapping**: The JSON schema definition maps the required XML element and attribute to the *key-value* pairs in JSON format.
 
@@ -132,30 +132,30 @@ Here is an example of a simple JSON schema (<u>of course, without the dotted lin
 
 ```json5
 {
-    "ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)",......................(1)
-    "Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",...........................(2)
-    "OrderNo": "VALUE(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",...................(3)
-    "Carrier": "XYZ-ABCD Logistics",.........................................................(4)
-    "LineItems" : [{.........................................................................(5)
-        "recurrent_path": "/MyShipments/Shipment/Lines/Line",................................(6)
-        "Identifier": "RECUR_ELEM(/Item/@Id)",...............................................(7)
-        "Quantity": "RECUR_ELEM(/Item/@Qty):INT",............................................(8)
-        "Description": "RECUR_ELEM(/Item/@Desc)",............................................(9)
-        "Status": "RECUR_ELEM(/Order/@Status)",..............................................(10)
-        "Price": "RECUR_ELEM(/Item/@Cost):DBL",..............................................(11)
-        "Field1": "CONSTANT1",...............................................................(12)
-        "Field2": 1000,......................................................................(13)
-        "Field3": "XPATH(/MyShipments/Shipment/@Number)",....................................(14)
-        "Field4": "VALUE(/MyShipments/Shipment/@Number):INT",................................(15)
-        "Field4": "XPATH(/MyShipments/Shipment/Organization)"................................(16)
+    "ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)",............(1)
+    "Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",.................(2)
+    "OrderNo": "VALUE(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",.........(3)
+    "Carrier": "XYZ-ABCD Logistics",...............................................(4)
+    "LineItems" : [{...............................................................(5)
+        "recurrent_path": "/MyShipments/Shipment/Lines/Line",......................(6)
+        "Identifier": "RECUR_ELEM(/Item/@Id)",.....................................(7)
+        "Quantity": "RECUR_ELEM(/Item/@Qty):INT",..................................(8)
+        "Description": "RECUR_ELEM(/Item/@Desc)",..................................(9)
+        "Status": "RECUR_ELEM(/Order/@Status)",....................................(10)
+        "Price": "RECUR_ELEM(/Item/@Cost):DBL",....................................(11)
+        "Field1": "CONSTANT1",.....................................................(12)
+        "Field2": 1000,............................................................(13)
+        "Field3": "XPATH(/MyShipments/Shipment/@Number)",..........................(14)
+        "Field4": "VALUE(/MyShipments/Shipment/@Number):INT",......................(15)
+        "Field4": "XPATH(/MyShipments/Shipment/Organization)"......................(16)
     }],
-    "Temp": [................................................................................(17)
-        "VALUE(/MyShipments/Shipment/Organization)",.........................................(18)
-        1234,................................................................................(19)
-        "ABCD",..............................................................................(20)
-        "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)"...........................(21)
+    "Temp": [......................................................................(17)
+        "VALUE(/MyShipments/Shipment/Organization)",...............................(18)
+        1234,......................................................................(19)
+        "ABCD",....................................................................(20)
+        "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)".................(21)
     ],
-    "OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)".........................(22)
+    "OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)"...............(22)
 }
 ```
 
