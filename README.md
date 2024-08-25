@@ -126,9 +126,9 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
 
 5- **Recurring Fields**: Using recurring fields helps create complex JSON structures fields such as arrays in the output (if required).
 
-### Example JSON Schema
+### <a name="example"></a>Example JSON Schema
 
-Here is an example of a simple JSON schema (<u>of course, without the dotted lines and the numbers at the end of each line</u>):<a name="example"></a>
+Here is an example of a simple JSON schema (<u>of course, without the dotted lines and the numbers at the end of each line</u>):
 
 ```json5
 {
@@ -383,7 +383,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
            "ABCD",
            "22268086"
        ],
-       "OrderTempInfo": "&lt;Order Order_Key=&quot;20210330113201178156395&quot; Order_Num=&quot;22268086&quot; Status=&quot;113350&quot; Status_Desc=&quot;Included In Shipment&quot; Type=&quot;COD_SHP&quot;/&gt;",
+       "OrderTempInfo": "<Order Order_Key="20210330113201178156395" Order_Num="22268086" Status="113350" Status_Desc="Included In Shipment" Type="COD_SHP"/>",
        "OrderNo": "22268086",
        "Carrier": "XYZ-ABCD Logistics"
    }
