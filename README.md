@@ -126,7 +126,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
 
 5- **Recurring Fields**: Using recurring fields helps create complex JSON structures fields such as arrays in the output (if required).
 
-### <a name="example"></a>Example JSON Schema
+### <a name="json-example"></a>Example JSON Schema
 
 Here is an example of a simple JSON schema (<u>of course, without the dotted lines and the numbers at the end of each line</u>):
 
@@ -225,11 +225,11 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    
    - The *XPATH* keyword is used to map a JSON field to an XML entity.
    
-   - The entity in context can be an attribute (Lines: [1/2/3](#example)), an element (Line: [22](#example)) or a text-node (Line: [16](#example)).
+   - The entity in context can be an attribute (Lines: [1/2/3](#json-example)), an element (Line: [22](#json-example)) or a text-node (Line: [16](#json-example)).
    
    - When an XML element is mapped to JSON field, the whole element is set as the value in an encoded string format (with UTF-8 support).
    
-   - The *XPATH* can be used to define item in array with the JSON (Line: [21](#example))
+   - The *XPATH* can be used to define item in array with the JSON (Line: [21](#json-example))
    
    - <u>Syntax</u>:
      
@@ -245,7 +245,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    
    - Additionally, the *VALUE* keyword can be used for mapping the value of the XML element to a JSON field i.e. the text-nodes.
    
-   - In the above [example](#xml-exmaple), the `Organization` element has a text value which is "Some Org Name" which is mapped in Line: [18](#example) in the JSON schema.
+   - In the above [example](#xml-exmaple), the `Organization` element has a text value which is "Some Org Name" which is mapped in Line: [18](#json-example) in the JSON schema.
    
    - <u>Syntax</u>:
      
@@ -259,13 +259,13 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    
    - The *recurrent_path* is special field that can be used in the JSON schema definition when an array is required in the converted JSON.
    
-   - In the above example, line: [5](#example) (i.e. the `LineItems` field) is a JSON array, as denoted by the square brackets.
+   - In the above example, line: [5](#json-example) (i.e. the `LineItems` field) is a JSON array, as denoted by the square brackets.
    
    - This special field defines the path of the repeated XML element in the input XML.
    
    - For having an array in the converted JSON, the *recurrent_path* field must be present. Otherwise, it will be treated as a JSON object instead of an array.
    
-   - In the above example, line: [6](#example) defines the path of the repeated element in the input XML, which in this case is the `Line` element.
+   - In the above example, line: [6](#json-example) defines the path of the repeated element in the input XML, which in this case is the `Line` element.
    
    - The number of items in the final JSON array would be the same as the number of times, the element in the input XML has been repeated.
    
@@ -289,13 +289,13 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    
    - In the above [example](#xml-example), the element `Item` and the corresponding attribute `Id` appears for every repeated `Line` element.
      
-     - And as shown in Line: [7](#example), the field `Identifier` is mapped to this `Id` attribute using the *RECUR_ELEM* keyword.
+     - And as shown in Line: [7](#json-example), the field `Identifier` is mapped to this `Id` attribute using the *RECUR_ELEM* keyword.
      
      - For a particular field inside the final array, while the *recurrent_path* will give the first part of the XPath, the *RECUR_ELEM* will give the later part.
      
      - Combining together, the final XPath will point to the actual attribute/element in the input XML.
    
-   **Note**: It is not mandatory that every field inside the array must be mapped to a repeated attribute/element in the input XML. The [XPATH](#xpath) and [VALUE](#value) keywords or any constant value can also be used in tandem with the *RECUR_ELEM* keyword (Line: [12,13,14,15,16](#example)). However, in the final converted JSON, the non-*RECUR_ELEM* values will appear for each item in the array (see: [result](#result)).
+   **Note**: It is not mandatory that every field inside the array must be mapped to a repeated attribute/element in the input XML. The [XPATH](#xpath) and [VALUE](#value) keywords or any constant value can also be used in tandem with the *RECUR_ELEM* keyword (Line: [12,13,14,15,16](#json-example)). However, in the final converted JSON, the non-*RECUR_ELEM* values will appear for each item in the array (see: [result](#result)).
 
 #### DataTypes
 
