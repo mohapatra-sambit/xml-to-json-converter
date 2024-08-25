@@ -476,7 +476,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
 
 ## Scope of Improvement
 
-- Support for simple String operations like CONCAT, SUBSTRING, LENGTH etc.
+- Support for simple String operations like CONCAT, SUBSTRING, LENGTH, UPPER, LOWER etc.
 
 ## Contributing
 
