@@ -239,13 +239,13 @@ The corresponding sample input XML is:<a name="xml-example"></a>
      }
      ```
 
-2. <a value="value"></a>**VALUE**:
+2. <a name="value"></a>**VALUE**:
    
    - For and XPath expression that is implied for an XML attribute, the *VALUE* keyword will yield the exact same result as **XPATH**.
    
    - Additionally, the *VALUE* keyword can be used for mapping the value of the XML element to a JSON field i.e. the text-nodes.
    
-   - In the above [example](#xml-exmaple), the `Organization` element has a text value which is "Some Org Name" which is mapped in Line: [18](#json-example) in the JSON schema.
+   - In the above [example](#xml-example), the `Organization` element has a text value which is "Some Org Name" which is mapped in Line: [18](#json-example) in the JSON schema.
    
    - <u>Syntax</u>:
      
@@ -336,7 +336,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
 
 ### <a name="result"></a>Converted JSON Output
 
-1. For the above given example, wherein JSON schema is [this](#example) and input XML is [this](#xml-example), the resultant converted JSON is:
+1. For the above given example, wherein JSON schema is [this](#json-example) and input XML is [this](#xml-example), the resultant converted JSON is:
    
    ```json
    {
