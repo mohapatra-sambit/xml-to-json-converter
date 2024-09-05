@@ -480,7 +480,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
 
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](https://github.com/yourusername/XML2JSON/blob/main/CONTRIBUTING.md) for more details on how to contribute to this project.
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for more details on how to contribute to this project.
 
 ## License
 

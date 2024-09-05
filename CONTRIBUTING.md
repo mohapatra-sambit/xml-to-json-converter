@@ -64,5 +64,3 @@ Make sure that all tests are passing and any new features are covered with appro
 ## License
 
 By contributing, you agree that your contributions will be licensed under the [Apache License 2.0](LICENSE).
-
-
