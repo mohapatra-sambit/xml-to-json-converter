@@ -91,7 +91,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
      
      - Add the entire JSON schema string as a value to this new element.
      
-     - Pass this updated XML to the API. (Refer [Javadocs](docs/) here)
+     - Pass this updated XML to the API. (Refer [Javadocs](https://mohapatra-sambit.github.io/xml-to-json-converter/) here)
      
      - **Example**,
        
@@ -116,7 +116,7 @@ To use the XML to JSON Converter as a library in your Java project, add any of t
      
      - Similarly, the schema JSON can be passed as [String](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html) or [File](https://docs.oracle.com/javase/8/docs/api/java/io/File.html) or [JSONObject](https://javadoc.io/doc/org.json/json/latest/index.html) object.
      
-     - Refer [Javadocs](docs/) here for the API specifications.
+     - Refer [Javadocs](https://mohapatra-sambit.github.io/xml-to-json-converter/) here for the API specifications.
 
 3- **Structure Mapping**: The JSON schema definition maps the required XML element and attribute to the *key-value* pairs in JSON format.
 
@@ -484,7 +484,7 @@ Contributions are welcome! Please read our [Contributing Guide](https://github.c
 
 ## License
 
-This project is licensed under the [Apache License 2.0](https://github.com/yourusername/XML2JSON/blob/main/LICENSE).
+This project is licensed under the [Apache License 2.0](LICENSE).
 
 ## Support
 
