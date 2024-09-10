@@ -147,7 +147,7 @@ Here is an example of a simple JSON schema (<u>of course, without the dotted lin
         "Field2": 1000,............................................................(13)
         "Field3": "XPATH(/MyShipments/Shipment/@Number)",..........................(14)
         "Field4": "VALUE(/MyShipments/Shipment/@Number):INT",......................(15)
-        "Field4": "XPATH(/MyShipments/Shipment/Organization)"......................(16)
+        "Field5": "XPATH(/MyShipments/Shipment/Organization)"......................(16)
     }],
     "Temp": [......................................................................(17)
         "VALUE(/MyShipments/Shipment/Organization)",...............................(18)
@@ -155,7 +155,40 @@ Here is an example of a simple JSON schema (<u>of course, without the dotted lin
         "ABCD",....................................................................(20)
         "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)".................(21)
     ],
-    "OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)"...............(22)
+    "OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)",..............(22)
+    "Temp1": "VALUE(/MyShipments/Shipment/Lines/Line)",............................(23)
+    "Tax": "VALUE(/MyShipments/Shipment/Taxes)",...................................(24)
+    "Address": "VALUE(/MyShipments/Shipment/Address)",.............................(25)
+    "Temp2": "CONCAT(a, b, xyz${COMMA}123)",.......................................(26)
+    "Temp3": "CONCAT(12, /MyShipments/Shipment/Lines/Line/Order/@Order_Num)",......(27)
+    "Temp4": "CONCAT(/MyShipments/Shipment/Lines/Line/Order)",.....................(28)
+    "Temp5": [.....................................................................(29)
+        "CONCAT(c,-, /MyShipments/Shipment/Lines/Line/Order/@Order_Num,;)",........(30)
+        12345,.....................................................................(31)
+        "abcd",....................................................................(32)
+        "VALUE(/MyShipments/Shipment/Organization)",...............................(33)
+        "LEN(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",..................(34)
+        "UPPER(abcd)",.............................................................(35)
+        "LOWER(/MyShipments/Shipment/Organization)"................................(36)
+    ],
+    "Temp6": "LEN(abcd):INT",......................................................(37)
+    "Temp7": "LEN(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",.............(38)
+    "Temp8": "LEN(/MyShipments/Shipment/Organization)",............................(39)
+    "Temp9": "LEN(/MyShipments/Shipment/Lines/Line)",..............................(40)
+    "Temp10": "UPPER(abcd)",.......................................................(41)
+    "Temp11": "UPPER(/MyShipments/Shipment/Lines/Line/Order/@Status_Desc)",........(42)
+    "Temp12": "UPPER(/MyShipments/Shipment/Organization)",.........................(43)
+    "Temp13": "UPPER(/MyShipments/Shipment/Lines/Line)",...........................(44)
+    "Temp14": "LOWER(aBcDEFGH)",...................................................(45)
+    "Temp15": "LOWER(/MyShipments/Shipment/Lines/Line/Order/@Status_Desc)",........(46)
+    "Temp16": "LOWER(/MyShipments/Shipment/Organization)",.........................(47)
+    "Temp17": "LOWER(/MyShipments/Shipment/Lines/Line)",...........................(48)
+    "Temp18": "SUBSTR(abcdefgh, 3, 7)",............................................(49)
+    "Temp19": "SUBSTR(abcdefgh, 0, 4)",............................................(50)
+    "Temp20": "SUBSTR(/MyShipments/Shipment/Organization, 0, 4)",..................(51)
+    "Temp21": "SUBSTR(/MyShipments/Shipment/Organization, 1, 10)",.................(52)
+    "Temp22": "SUBSTR(/MyShipments/Shipment/@Shipment_Key, 3, 15)",................(53)
+    "Temp23": "SUBSTR(/MyShipments/Shipment/@Shipment_Key_Inv, 3, 15)".............(54)
 }
 ```
 
@@ -163,7 +196,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
 
 ```xml
 <MyShipments>
-    <Shipment Shipment_Key="1202103301135561781564861" Number="528630">
+    <Shipment Shipment_Key="1202103301135561781564861" Number="528630" AttrOne="true">
         <Lines>
             <Line Line_Key="1202103301135561781564831">
                 <Order Status="113350" Status_Desc="Included In Shipment" Order_Key="20210330113201178156395" Order_Num="22268086" Type="COD" />
@@ -179,6 +212,8 @@ The corresponding sample input XML is:<a name="xml-example"></a>
             </Line>
         </Lines>
         <Organization>Some Org Name</Organization>
+        <Taxes><GST>18</GST></Taxes>
+        <Address><![CDATA[some information]]></Address>
     </Shipment>
 </MyShipments>
 ```
@@ -295,7 +330,130 @@ The corresponding sample input XML is:<a name="xml-example"></a>
      
      - Combining together, the final XPath will point to the actual attribute/element in the input XML.
    
+   - Syntax:
+     
+     ```json
+     {
+         "Field1": [{
+             "recurrent_path": "<XPATH of the repeated element>",
+             "key": "RECUR_ELEM(<XPATH of the element/attribute after the recurrent_path>)"
+         }]
+     }
+     ```
+   
    **Note**: It is not mandatory that every field inside the array must be mapped to a repeated attribute/element in the input XML. The [XPATH](#xpath) and [VALUE](#value) keywords or any constant value can also be used in tandem with the *RECUR_ELEM* keyword (Line: [12,13,14,15,16](#json-example)). However, in the final converted JSON, the non-*RECUR_ELEM* values will appear for each item in the array (see: [result](#result)).
+
+5. <a name="concat"></a>**CONCAT**:
+   
+   - The _CONCAT_ keyword is to concatenate multiple XPath values and/or constant values to form the value of JSON field.
+   
+   - It accepts variable arguments i.e. any number of parameters and the result will be a concatenated string after resolving the XPath expressions from the input XML.
+   
+   - All the arguments are to be passed as comma-separated strings including the constant values.
+   
+   - If any constant contains a comma character that needs to be marked with `${COMMA}` identifier as shown in Line: [26](#example).
+   
+   - Line: [26](#example) is an example of _CONCAT_ keyword with only constants as arguments.
+   
+   - Line: [27](#example) will concatenate a constant string to the resolved value of the XPath expression passed in the second argument.
+   
+   - The _CONCAT_ keyword will work for the XPath expressions that are meant for an attribute's value as well for a text-node.
+   
+   - If the XPath is for an XML element that doesn't have a text-node, then a blank string will be concatenated with the other arguments (Line: [28](#example)).
+   
+   - The _CONCAT_ will also work in an array within the JSON (Line: [30](#example)).
+   
+   - Syntax:
+     
+     ```json
+     {
+         "Key": "CONCAT(XPATH1, XPATH2, .... CONSTANT1, CONSTANT2, ...)"
+     }
+     ```
+   
+   - The sequence of the argument can be as per the requirement.
+
+6. <a name="len"></a>**LEN**:
+   
+   - The _LEN_ keyword is to determine the length of the XPath value or the constant value and stamp the same as the value of the JSON field.
+   
+   - This keyword will support the *INT* datatype as well (Line: [37](#example)).
+   
+   - If no datatype is specified, the length will be stamped as a string value (Line: [38](#example)).
+   
+   - The *LEN* keyword will work for the XPath expressions that are meant for an attribute's value as well for a text-node (Line: [39](#example)).
+   
+   - If the XPath is for an XML element that doesn't have a text-node, then a `"0"` will be stamped as the value (Line: [40](#example)).
+   
+   - Syntax:
+     
+     ```json
+     {
+         "key": "LEN(COMPLETE_XPATH_EXPRESSION or Constant)"
+     }
+     ```
+
+7. <a name="upper"></a>**UPPER**:
+   
+   - The *UPPER* keyword is to determine the XPath value or the constant value and stamp the same as the value of the JSON field in UPPERCASE.
+   
+   - The *UPPER* keyword will work for the XPath expressions that are meant for an attribute's value as well for a text-node (Line: [41, 42, 43](#example)).
+   
+   - If the XPath is for an XML element that doesn't have a text-node, then a blank string will be stamped as the value (Line: [44](#example)).
+   
+   - Syntax:
+     
+     ```json
+     {
+         "key": "UPPER(COMPLETE_XPATH_EXPRESSION or Constant)"
+     }
+     ```
+
+8. <a name="lower"></a>**LOWER**:
+   
+   - The *LOWER* keyword is to determine the XPath value or the constant value and stamp the same as the value of the JSON field in LOWERCASE.
+   
+   - The *LOWER* keyword will work for the XPath expressions that are meant for an attribute's value as well for a text-node (Line: [45, 46, 47](#example)).
+   
+   - If the XPath is for an XML element that doesn't have a text-node, then a blank string will be stamped as the value (Line: [48](#example)).
+   
+   - Syntax:
+     
+     ```json
+     {
+         "key": "LOWER(COMPLETE_XPATH_EXPRESSION or Constant)"
+     }
+     ```
+
+9. <a name="substr"></a>**SUBSTR**:
+   
+   - The _SUBSTR_ keyword determines the XPath value or the constant value and extracts the sub-string as per the given inputs.
+   
+   - This accepts 3 arguments:
+     
+     - the string: XPath expression or a constant string.
+     
+     - the start index
+     
+     - the end index
+   
+   - Any more arguments that is passed gets ignored.
+   
+   - The first index of the string is 0.
+   
+   - The sub-string value will be inclusive of the character at the end index.
+   
+   - The *SUBSTR* keyword will work for the XPath expressions that are meant for an attribute's value as well for a text-node (Line: [49, 50, 51, 52, 53](#example)).
+   
+   - If the XPath is for an XML element that doesn't have a text-node, then a blank string will be stamped as the value (Line: [54](#example)).
+   
+   - Syntax:
+     
+     ```json
+     {
+         "key": "SUBSTR(COMPLETE_XPATH_EXPRESSION or Constant, start_index, end_index)"
+     }
+     ```
 
 #### DataTypes
 
@@ -318,7 +476,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    }
    ```
 
-4. <u>Example</u>: Line: [](#example) would give the JSON result as:
+4. <u>Example</u>: Line: [8](#example) would give the JSON result as:
    
    ```json
    {
@@ -340,52 +498,109 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    
    ```json
    {
+       "Temp16": "some org name",
+       "Temp15": "included in shipment",
+       "Temp18": "defgh",
+       "Temp17": "",
+       "Address": "",
+       "Temp19": "abcde",
+       "OrderNo": "22268086",
+       "Tax": "<Taxes><GST>18</GST></Taxes>",
+       "Temp9": "0",
+       "Temp10": "ABCD",
+       "Temp8": "13",
+       "Temp7": "8",
+       "Temp12": "SOME ORG NAME",
+       "Temp6": 4,
+       "Temp11": "INCLUDED IN SHIPMENT",
+       "Temp5": [
+           "c-22268086;Some Org Name",
+           12345,
+           "abcd",
+           "Some Org Name",
+           "8",
+           "ABCD",
+           "some org name"
+       ],
+       "Temp14": "abcdefgh",
+       "Temp4": "",
+       "Temp13": "",
        "ShipmentIdentifier": "1202103301135561781564861",
-       "Type": "COD",
+       "Temp": [
+           "Some Org Name",
+           1234,
+           "ABCD",
+           22268086,
+           1,
+           true,
+           [
+               2345,
+               "XYZ",
+               "20210330113201178156395"
+           ],
+           {"Comp": "Some Org Name"}
+       ],
+       "Carrier": "XYZ-ABCD Logistics",
        "LineItems": [
            {
                "Status": "113350",
                "Field4": 528630,
+               "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
                "Field2": 1000,
                "Identifier": "I1",
                "Description": "Shoes",
                "Field3": "528630",
                "Price": 150.99,
                "Quantity": 1,
+               "TempOne": [
+                   5,
+                   {"Field6": "528630"}
+               ],
                "Field1": "CONSTANT1"
            },
            {
                "Status": "113351",
                "Field4": 528630,
+               "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
                "Field2": 1000,
                "Identifier": "I2",
                "Description": "Socks",
                "Field3": "528630",
                "Price": 75.5,
                "Quantity": 2,
+               "TempOne": [
+                   5,
+                   {"Field6": "528630"}
+               ],
                "Field1": "CONSTANT1"
            },
            {
                "Status": "113353",
                "Field4": 528630,
+               "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
                "Field2": 1000,
                "Identifier": "I3",
                "Description": "Writing Pad",
                "Field3": "528630",
                "Price": 120,
                "Quantity": 3,
+               "TempOne": [
+                   5,
+                   {"Field6": "528630"}
+               ],
                "Field1": "CONSTANT1"
            }
        ],
-       "Temp": [
-           "Some Org Name",
-           1234,
-           "ABCD",
-           "22268086"
-       ],
-       "OrderTempInfo": "<Order Order_Key="20210330113201178156395" Order_Num="22268086" Status="113350" Status_Desc="Included In Shipment" Type="COD_SHP"/>",
-       "OrderNo": "22268086",
-       "Carrier": "XYZ-ABCD Logistics"
+       "OrderTempInfo": "&lt;Order Order_Key=&quot;20210330113201178156395&quot; Order_Num=&quot;22268086&quot; Status=&quot;113350&quot; Status_Desc=&quot;Included In Shipment&quot; Type=&quot;COD&quot;/>",
+       "Temp21": "ome Org Na",
+       "Temp20": "Some ",
+       "Info": {"1": "2"},
+       "Temp23": "",
+       "Temp22": "2103301135561",
+       "Temp3": "1222268086",
+       "Temp2": "abxyz,123",
+       "Type": "COD",
+       "Temp1": "&lt;Order Order_Key=&quot;20210330113201178156395&quot; Order_Num=&quot;22268086&quot; Status=&quot;113350&quot; Status_Desc=&quot;Included In Shipment&quot; Type=&quot;COD&quot;/&gt;&lt;Item Cost=&quot;150.99&quot; Desc=&quot;Shoes&quot; Id=&quot;I1&quot; Qty=&quot;1&quot;/&gt;"
    }
    ```
 
@@ -455,6 +670,43 @@ The corresponding sample input XML is:<a name="xml-example"></a>
    }
    ```
 
+## Error Codes
+
+| Error Code  | Error Message                                                               | Possible Reason                                                                                                   |
+| ----------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| X2J_ERR_000 | Fatal error. Please rebuild the jar or download the latest one from Github. | Jar file is either corrupted or not built properly.                                                               |
+| X2J_ERR_001 | Error while reading XML from file.                                          | XML is not readable due to permissions issues or the XML structure is not correct.                                |
+| X2J_ERR_002 | Error while reading JSON from file/string.                                  | JSON file is not readable or the JSON string is not a valid one.                                                  |
+| X2J_ERR_003 | Error while parsing JSON from file/string.                                  | JSON string might have some kind of syntax errors.                                                                |
+| X2J_ERR_004 | Error while reading XML data using XPaths.                                  | While trying to read all the child elements of a given element, the XPath expression is not valid.                |
+| X2J_ERR_005 | Error while reading XML attribute value using XPaths.                       | While trying to read the attributes of a given element, the XPath expression is not valid.                        |
+| X2J_ERR_006 | Error while reading XML element using XPaths.                               | While trying to read one child element of a given element, the XPath expression is not valid.                     |
+| X2J_ERR_007 | Error while converting XML element/document to String.                      | While converting an XML to string, the input might be null or exception was thrown during the conversion process. |
+| X2J_ERR_008 | Error while writing JSON to file.                                           | An invalid JSON might be getting saved to a file.                                                                 |
+| X2J_ERR_009 | Error while parsing XML from String.                                        | The input XML is not a valid one that is being read from a string.                                                |
+| X2J_ERR_010 | Input XML file not found.                                                   | The mandatory argument is not set while trying to execute the application from command line.                      |
+| X2J_ERR_011 | Error during string operation.                                              | The input argument defined in the schema while doing string operations is not as expected.                        |
+
+## Extending Error Messages
+
+The above given error messages can be customized as per user's requirements. Following are the steps for extending the error messages:
+
+1. Create a new file with the name `x2j-msgs.properties` and save it either in the same folder as the jar file or in the User's **Home** folder.
+   
+   - Home folder in Windows is the `C:\Users\<USER_NAME>` folder.
+   
+   - In Linux, it is the `/home/USER_NAME` folder.
+
+2. Open the file in a text editor and add the entries for the error codes that needs to be extended. It is possible to extend only a few error codes as per the requirements. The remaining error codes would still work with the out-of-the-box error messages.
+   
+   For example, if the message for **X2J_ERR_004** needs to be customized, the entry for it would like,
+   
+   ```properties
+   X2J_ERR_004=<New Error Messages Here>
+   ```
+
+3. Save the file in on of the above-mentioned locations and restart the application. The newly extended messages should automatically take effect post restart.
+
 ## Limitation(s)
 
 - Currently, in the output JSON, an array at the very starting of the JSON (as shown below) is not supported.
@@ -476,7 +728,7 @@ The corresponding sample input XML is:<a name="xml-example"></a>
 
 ## Scope of Improvement
 
-- Support for simple String operations like CONCAT, SUBSTRING, LENGTH, UPPER, LOWER etc.
+- Support for simple String operations like CONCAT, SUBSTRING, LENGTH, UPPER, LOWER etc - **Implemented in ver.1.1**.
 
 ## Contributing
 
@@ -490,10 +742,21 @@ This project is licensed under the [Apache License 2.0](LICENSE).
 
 If you encounter any issues or have questions, please open an issue in this repository or contact the maintainers directly.
 
+## Feedback/Suggestions
+
+Feel free to contact me at sambit.mohapatra@gmail.com with any suggestions for improvement or other feedback.
+
 ## Changelog
 
-### Version 0.0.1-SNAPSHOT
+### Version 1.0-SNAPSHOT
 
 - Initial release of XML to JSON Converter.
 - Added support for CLI usage and library integration.
 - Implemented schema-based XML to JSON conversion.
+
+### Version 1.1
+
+- Implemented the String functions: [CONCAT](#concat), [LEN](#len), [UPPER](#upper), [LOWER](#lower) and [SUBSTR](#substr).
+- Modified the String processor logic to use Factory pattern.
+- Introduced TEST mode and NORMAL mode for testing and real-time execution scenarios.
+- Minor bug fixes and documentation fixes.

@@ -41,6 +41,17 @@ public class XMLToJSONConverterTest {
 	}
 
 	@Test
+	public void testX2JDefaultConversionWithEmptyJSONSchema() throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/x2j_conv_test_input_1-2.xml");
+		JSONObject actual = new XMLToJSONConverter().convertToJson(doc);
+		JSONObject expected = X2JUtils.getJsonFromFile(
+				new File("src/test/java/com/x2j/converter/common/test/x2j_conv_test_results_1-2.json"));
+		assertTrue(expected.similar(actual));
+	}
+
+	@Test
 	public void testX2JConversionUsingSchemaAsString() throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();

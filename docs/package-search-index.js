@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.x2j.converter.main"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.x2j.converter.mgr.handlers"},{"l":"com.x2j.converter.mgr.handlers.impl"}];updateSearchResults();

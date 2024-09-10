@@ -17,7 +17,6 @@ public class X2JException extends Exception {
 	 */
 	public X2JException(X2JErrorCodes errorCode) {
 		super(X2JMsgUtils.getInstance().getMessage(errorCode.name()));
-
 	}
 
 	/**

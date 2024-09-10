@@ -36,6 +36,31 @@ public interface X2JConstants {
 	public static final String VALUE = "VALUE(";
 
 	/**
+	 * CONCAT(
+	 */
+	public static final String CONCAT = "CONCAT(";
+
+	/**
+	 * LEN(
+	 */
+	public static final String LEN = "LEN(";
+
+	/**
+	 * UPPER(
+	 */
+	public static final String UPPER = "UPPER(";
+
+	/**
+	 * LOWER(
+	 */
+	public static final String LOWER = "LOWER(";
+
+	/**
+	 * SUBSTR(
+	 */
+	public static final String SUBSTR = "SUBSTR(";
+
+	/**
 	 * INT
 	 */
 	public static final String INTEGER = "INT";
@@ -44,9 +69,9 @@ public interface X2JConstants {
 	 * DBL
 	 */
 	public static final String DOUBLE = "DBL";
-	
+
 	/**
-	 * DBL
+	 * BOOL
 	 */
 	public static final String BOOLEAN = "BOOL";
 

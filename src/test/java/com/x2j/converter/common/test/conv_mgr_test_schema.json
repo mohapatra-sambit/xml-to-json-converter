@@ -3,18 +3,80 @@
 	"Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",
 	"OrderNo": "VALUE(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",
 	"Carrier": "XYZ-ABCD Logistics",
-	"LineItems" : [{
-		"recurrent_path": "/MyShipments/Shipment/Lines/Line",
-		"Identifier": "RECUR_ELEM(/Item/@Id)",
-		"Quantity": "RECUR_ELEM(/Item/@Qty):INT",
-		"Description": "RECUR_ELEM(/Item/@Desc)",
-		"Status": "RECUR_ELEM(/Order/@Status)",
-		"Price": "RECUR_ELEM(/Item/@Cost):DBL",
-		"Field1": "CONSTANT1",
-		"Field2": 1000,
-		"Field3": "XPATH(/MyShipments/Shipment/@Number)",
-		"Field4": "VALUE(/MyShipments/Shipment/@Number):INT"
-	}],
-	"Temp": ["VALUE(/MyShipments/Shipment/Organization)", 1234, "ABCD", "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)"],
-	"OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)"
+	"LineItems": [
+		{
+			"recurrent_path": "/MyShipments/Shipment/Lines/Line",
+			"Identifier": "RECUR_ELEM(/Item/@Id)",
+			"Quantity": "RECUR_ELEM(/Item/@Qty):INT",
+			"Description": "RECUR_ELEM(/Item/@Desc)",
+			"Status": "RECUR_ELEM(/Order/@Status)",
+			"Price": "RECUR_ELEM(/Item/@Cost):DBL",
+			"Field1": "CONSTANT1",
+			"Field2": 1000,
+			"Field3": "XPATH(/MyShipments/Shipment/@Number)",
+			"Field4": "VALUE(/MyShipments/Shipment/@Number):INT",
+			"TempOne": [
+				5,
+				{
+					"Field6": "XPATH(/MyShipments/Shipment/@Number)"
+				}
+			],
+			"TempTwo": {
+				"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"
+			}
+		}
+	],
+	"Temp": [
+		"VALUE(/MyShipments/Shipment/Organization)",
+		1234,
+		"ABCD",
+		"XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num):INT",
+		"XPATH(/MyShipments/Shipment/Lines/Line/Item/@Qty):DBL",
+		"XPATH(/MyShipments/Shipment/@AttrOne):BOOL",
+		[
+			2345,
+			"XYZ",
+			"XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Key)"
+		],
+		{
+			"Comp": "VALUE(/MyShipments/Shipment/Organization)"
+		}
+	],
+	"OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)",
+	"Info": {
+		"1": "2"
+	},
+	"Temp1": "VALUE(/MyShipments/Shipment/Lines/Line)",
+	"Tax": "VALUE(/MyShipments/Shipment/Taxes)",
+	"Address": "VALUE(/MyShipments/Shipment/Address)",
+	"Temp2": "CONCAT(a, b, xyz${COMMA}123)",
+	"Temp3": "CONCAT(12, /MyShipments/Shipment/Lines/Line/Order/@Order_Num)",
+	"Temp4": "CONCAT(/MyShipments/Shipment/Lines/Line/Order)",
+	"Temp5": [
+		"CONCAT(c,-, /MyShipments/Shipment/Lines/Line/Order/@Order_Num,;, /MyShipments/Shipment/Organization)",
+		12345,
+		"abcd",
+		"VALUE(/MyShipments/Shipment/Organization)",
+		"LEN(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",
+		"UPPER(abcd)",
+		"LOWER(/MyShipments/Shipment/Organization)"
+	],
+	"Temp6": "LEN(abcd):INT",
+	"Temp7": "LEN(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",
+	"Temp8": "LEN(/MyShipments/Shipment/Organization)",
+	"Temp9": "LEN(/MyShipments/Shipment/Lines/Line)",
+	"Temp10": "UPPER(abcd)",
+	"Temp11": "UPPER(/MyShipments/Shipment/Lines/Line/Order/@Status_Desc)",
+	"Temp12": "UPPER(/MyShipments/Shipment/Organization)",
+	"Temp13": "UPPER(/MyShipments/Shipment/Lines/Line)",
+	"Temp14": "LOWER(aBcDEFGH)",
+	"Temp15": "LOWER(/MyShipments/Shipment/Lines/Line/Order/@Status_Desc)",
+	"Temp16": "LOWER(/MyShipments/Shipment/Organization)",
+	"Temp17": "LOWER(/MyShipments/Shipment/Lines/Line)",
+	"Temp18": "SUBSTR(abcdefgh, 3, 7)",
+	"Temp19": "SUBSTR(abcdefgh, 0, 4)",
+	"Temp20": "SUBSTR(/MyShipments/Shipment/Organization, 0, 4)",
+	"Temp21": "SUBSTR(/MyShipments/Shipment/Organization, 1, 10)",
+	"Temp22": "SUBSTR(/MyShipments/Shipment/@Shipment_Key, 3, 15)",
+	"Temp23": "SUBSTR(/MyShipments/Shipment/@Shipment_Key_Inv, 3, 15)"
 }

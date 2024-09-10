@@ -200,6 +200,7 @@ public class XMLToJSONConverter {
 		if (!X2JUtils.isVoid(nodeList) && nodeList.getLength() > 0) {
 			String jsonSchema = nodeList.item(0).getTextContent();
 			if (X2JUtils.isVoid(jsonSchema)) {
+				root.removeChild(nodeList.item(0));
 				return "";
 			}
 			return jsonSchema;

@@ -2,16 +2,16 @@ package com.x2j.converter.main;
 
 import static com.x2j.converter.utils.X2JConstants.INPUT_JSON_SCHEMA_FILE;
 import static com.x2j.converter.utils.X2JConstants.INPUT_XML_FILE;
+import static com.x2j.converter.utils.X2JConstants.OUTPUT_JSON_FILE;
 
 import java.io.File;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.x2j.converter.XMLToJSONConverter;
 import com.x2j.converter.excp.X2JException;
-import com.x2j.converter.utils.X2JConstants;
 import com.x2j.converter.utils.X2JErrorCodes;
+import com.x2j.converter.utils.X2JExecMode;
 import com.x2j.converter.utils.X2JUtils;
 
 /**
@@ -20,7 +20,7 @@ import com.x2j.converter.utils.X2JUtils;
  * The only mandatory argument that is required is the input XML file path.<br>
  * If the JSON schema file path is passed as an argument, then that will be used
  * for conversion, otherwise the default conversion logic will be applied.<br>
- * For more informartion on JSON schema definition, please visit: <a href=
+ * For more information on JSON schema definition, please visit: <a href=
  * "https://github.com/mohapatra-sambit/xml-to-json-converter">XML-To-JSON
  * Converter</a><br>
  * Additionally, if the output file path is passed as an argument, then the
@@ -35,8 +35,11 @@ public class X2JMain {
 
 	private static String outFile;
 
+	private static X2JExecMode mode = X2JExecMode.NORMAL;
+
 	/**
 	 * The main method. <br>
+	 * <b>NORMAL Mode</b>:<br>
 	 * Validates, if the input XML file is passed as an argument.<br>
 	 * if yes, checks whether JSON schema is passes as an argument as well.<br>
 	 * if yes, invokes the {@link XMLToJSONConverter#convertToJson(File, File)}
@@ -50,11 +53,16 @@ public class X2JMain {
 	 * <br>
 	 * <b>Usage</b>: java -DInputXml=PATH_OF_INPUT_XML_FILE
 	 * -DSchemaJson=PATH_OF_SCHEMA_JSON_FILE -DOutputJson=PATH_OF_OUTPUT_JSON_FILE
-	 * -jar XML2JSON-0.0.1-SNAPSHOT-jar-with-dependencies.jar
-	 *
+	 * -jar XML2JSON-0.0.1-SNAPSHOT-jar-with-dependencies.jar<br>
+	 * <br>
+	 * <b>TEST Mode</b>:<br>
+	 * In case of validation failure, this will throw X2JException instead of
+	 * stopping the application with an error message.
+	 * 
 	 * @param args the command-line arguments
+	 * @throws X2JException X2JException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws X2JException {
 		try {
 			validateArguments();
 			XMLToJSONConverter converter = new XMLToJSONConverter();
@@ -70,25 +78,35 @@ public class X2JMain {
 				X2JUtils.writeJsonToFile(convertedJson, new File(outFile));
 				System.out.println("Conversion Completed!");
 			}
-		} catch (JSONException e) {
-			System.out.println(X2JErrorCodes.X2J_ERR_003.getDefaultEnglishErrorMessage());
-			e.printStackTrace();
 		} catch (X2JException e) {
-			System.out.println(e.getErrorMessage());
-			e.printStackTrace();
+			if (mode == X2JExecMode.NORMAL) {
+				System.out.println(e.getErrorMessage());
+				e.printStackTrace();
+			} else {
+				throw e;
+			}
 		}
 	}
 
-	private static void validateArguments() {
+	/**
+	 * Sets the execution mode for the X2J application (X2JExecMode).
+	 *
+	 * @param mode the new execution mode
+	 */
+	public static void setMode(X2JExecMode mode) {
+		X2JMain.mode = mode;
+	}
+
+	private static void validateArguments() throws X2JException {
 		xmlFile = System.getProperty(INPUT_XML_FILE);
 		if (X2JUtils.isVoid(xmlFile)) {
 			exitWithUsage();
 		}
 		jsonFile = System.getProperty(INPUT_JSON_SCHEMA_FILE);
-		outFile = System.getProperty(X2JConstants.OUTPUT_JSON_FILE);
+		outFile = System.getProperty(OUTPUT_JSON_FILE);
 	}
 
-	private static void exitWithUsage() {
+	private static void exitWithUsage() throws X2JException {
 		System.out.println("Usage::");
 		System.out.println("java -DInputXml=PATH_OF_INPUT_XML_FILE -DSchemaJson=PATH_OF_SCHEMA_JSON_FILE"
 				+ " -DOutputJson=PATH_OF_OUTPUT_JSON_FILE -jar XML2JSON-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
@@ -99,7 +117,12 @@ public class X2JMain {
 				"2. OutputJson: If the output json file is not specified, then the output is printed to the console.");
 		System.out.println(
 				"For more information on this, please visit: https://github.com/mohapatra-sambit/xml-to-json-converter");
-		System.exit(0);
+		switch (mode) {
+		case NORMAL:
+			System.exit(0);
+		case TEST:
+			throw new X2JException(X2JErrorCodes.X2J_ERR_010);
+		}
 	}
 
 }

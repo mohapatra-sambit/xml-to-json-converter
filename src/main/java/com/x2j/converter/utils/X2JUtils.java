@@ -1,5 +1,11 @@
 package com.x2j.converter.utils;
 
+import static com.x2j.converter.utils.X2JConstants.AMP;
+import static com.x2j.converter.utils.X2JConstants.APOS;
+import static com.x2j.converter.utils.X2JConstants.GT;
+import static com.x2j.converter.utils.X2JConstants.LT;
+import static com.x2j.converter.utils.X2JConstants.QUOT;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,6 +13,10 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -46,6 +57,17 @@ public class X2JUtils {
 
 	private static final TransformerFactory transFactory = TransformerFactory.newInstance();
 
+	private static Map<Character, String> splCharsMap;
+
+	static {
+		splCharsMap = new HashMap<Character, String>();
+		splCharsMap.put('<', LT);
+		splCharsMap.put('>', GT);
+		splCharsMap.put('\"', QUOT);
+		splCharsMap.put('\'', APOS);
+		splCharsMap.put('&', AMP);
+	}
+
 	/**
 	 * Null check for objects. <br>
 	 * Null or empty check for String.
@@ -54,20 +76,19 @@ public class X2JUtils {
 	 * @return true/false
 	 */
 	public static boolean isVoid(Object obj) {
+		if (obj instanceof String) {
+			return ((String) obj).trim().length() == 0;
+		}
 		if (obj == null) {
 			return true;
 		}
-		if (obj instanceof String) {
-			return ((String) obj).trim().length() == 0;
-		} else {
-			return obj == null;
-		}
+		return false;
 	}
 
 	/**
 	 * Reads and parses the file and returns the XML document.
 	 *
-	 * @param file: the input file
+	 * @param file the input file
 	 * @return XML Document
 	 * @throws X2JException if the file is not readable or the content is not a
 	 *                      valid XML.
@@ -84,7 +105,7 @@ public class X2JUtils {
 	/**
 	 * Reads and parses the file and returns the JSON object.
 	 *
-	 * @param file: the input file
+	 * @param file the input file
 	 * @return JSON Object
 	 * @throws X2JException if the file is not readable or the content is not a
 	 *                      valid JSON.
@@ -101,7 +122,7 @@ public class X2JUtils {
 	/**
 	 * Reads and parses the string and returns the JSON object.
 	 *
-	 * @param jsonString: the JSON string
+	 * @param jsonString the JSON string
 	 * @return JSON Object
 	 * @throws X2JException if the String is not a valid JSON.
 	 */
@@ -116,7 +137,7 @@ public class X2JUtils {
 	/**
 	 * Reads and parses the string and returns the XML document.
 	 *
-	 * @param inputXml: the input XML
+	 * @param inputXml the input XML
 	 * @return XML Document
 	 * @throws X2JException if the String is not a valid XML.
 	 */
@@ -226,6 +247,86 @@ public class X2JUtils {
 			} catch (Exception e) {
 			}
 		}
+	}
+
+	/**
+	 * Encodes the special characters in the given text. <br>
+	 * <ul>
+	 * <li>&lt; : &amp;lt;</li>
+	 * <li>&gt; : &amp;gt;</li>
+	 * <li>&apos; : &amp;apos;</li>
+	 * <li>&quot; : &amp;quot;</li>
+	 * <li>&amp; : &amp;amp;</li>
+	 * </ul>
+	 *
+	 * @param text any input String
+	 * @return the encoded string
+	 */
+	public static String encodeText(String text) {
+		if (X2JUtils.isVoid(text)) {
+			return "";
+		}
+		return IntStream.range(0, text.length()).mapToObj(i -> {
+			char c = (char) text.charAt(i);
+			return splCharsMap.containsKey(c) ? splCharsMap.get(c) : "" + c;
+		}).collect(Collectors.joining());
+	}
+
+	/**
+	 * Verifies whether the given expression is a valid XPath or not. <br>
+	 * In the context of this application, a simple string is not a valid XPath
+	 * expression.
+	 *
+	 * @param expression the XPATH expression
+	 * @return true, if the expression is valid a XPath, otherwise false
+	 */
+	public static boolean isValidXPath(String expression) {
+		if (expression == null || expression.trim().isEmpty()) {
+			return false;
+		}
+		if (!expression.contains("/") && !expression.contains("@") && !expression.contains("[")) {
+			return false;
+		}
+		XPath xPath = xpathFactory.newXPath();
+		try {
+			xPath.compile(expression);
+			return true;
+		} catch (XPathExpressionException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the string value as per specified schema for the String handlers.
+	 *
+	 * @param value       the XPath string
+	 * @param rootElement the root element in the input XML
+	 * @return the value after processing the XPath
+	 * @throws X2JException X2JException
+	 */
+	public static String getStringValueForHandlers(String value, Element rootElement) throws X2JException {
+		value = value.trim();
+		if (isValidXPath(value)) {
+			if (value.contains("@")) {
+				return encodeText(getXpathAttribute(rootElement, value));
+			} else {
+				Element elem = getXpathElement(rootElement, value);
+				if (!isVoid(elem)) {
+					if (elem.hasChildNodes()) {
+						NodeList allChildNodes = elem.getChildNodes();
+						for (int i = 0; i < allChildNodes.getLength(); i++) {
+							Node child = allChildNodes.item(i);
+							if (child.getNodeType() == Node.TEXT_NODE) {
+								return encodeText(child.getNodeValue().trim());
+							}
+						}
+					}
+				}
+			}
+		} else {
+			return value;
+		}
+		return "";
 	}
 
 	private static Object executeXPath(Element element, String xpath, QName type, X2JErrorCodes errCode)

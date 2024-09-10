@@ -1,28 +1,21 @@
 <MyShipments>
-    <Shipment Shipment_Key="1202103301135561781564861" Number="528630">
+    <Shipment Shipment_Key="1202103301135561781564861" Number="528630" AttrOne="true">
         <Lines>
             <Line Line_Key="1202103301135561781564831">
-                <Order Status="113350"
-                    Status_Desc="Included In Shipment"
-                    Order_Key="20210330113201178156395"
-                    Order_Num="22268086" Type="COD_SHP" />
+                <Order Status="113350" Status_Desc="Included In Shipment" Order_Key="20210330113201178156395" Order_Num="22268086" Type="COD" />
                 <Item Id="I1" Desc="Shoes" Qty="1" Cost="150.99"/>
             </Line>
             <Line Line_Key="1202103301135561781564841">
-                <Order Status="113351"
-                    Status_Desc="Included In Shipment"
-                    Order_Key="20210330113201178156395"
-                    Order_Num="22268086" Type="COD_SHP" />
+                <Order Status="113351" Status_Desc="Included In Shipment" Order_Key="20210330113201178156395" Order_Num="22268086" Type="RPR" />
                 <Item Id="I2" Desc="Socks" Qty="2" Cost="75.50"/>
             </Line>
             <Line Line_Key="1202103301135561781564851">
-                <Order Status="113353"
-                    Status_Desc="Included In Shipment"
-                    Order_Key="20210330113201178156395"
-                    Order_Num="22268086" Type="COD_SHP" />
+                <Order Status="113353" Status_Desc="Included In Shipment" Order_Key="20210330113201178156395" Order_Num="22268086" Type="RET" />
                 <Item Id="I3" Desc="Writing Pad" Qty="3" Cost="120"/>
             </Line>
         </Lines>
         <Organization>Some Org Name</Organization>
+        <Taxes><GST>18</GST></Taxes>
+        <Address><![CDATA[some information]]></Address>
     </Shipment>
 </MyShipments>

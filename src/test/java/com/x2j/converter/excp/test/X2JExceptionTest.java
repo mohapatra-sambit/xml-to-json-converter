@@ -14,7 +14,7 @@ import com.x2j.converter.utils.X2JMsgUtils;
 public class X2JExceptionTest {
 
 	@BeforeClass
-	public static void init() throws IOException {
+	public static void init() throws IOException, X2JException {
 		X2JMsgUtils.getInstance().reset();
 	}
 

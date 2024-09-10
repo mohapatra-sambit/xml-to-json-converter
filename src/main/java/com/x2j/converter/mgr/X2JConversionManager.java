@@ -1,23 +1,13 @@
 package com.x2j.converter.mgr;
 
-import static com.x2j.converter.utils.X2JConstants.AMP;
-import static com.x2j.converter.utils.X2JConstants.APOS;
 import static com.x2j.converter.utils.X2JConstants.BOOLEAN;
 import static com.x2j.converter.utils.X2JConstants.DOUBLE;
-import static com.x2j.converter.utils.X2JConstants.GT;
 import static com.x2j.converter.utils.X2JConstants.INTEGER;
 import static com.x2j.converter.utils.X2JConstants.RECURRENT_PATH;
 import static com.x2j.converter.utils.X2JConstants.RECUR_ELEMENT;
-import static com.x2j.converter.utils.X2JConstants.LT;
-import static com.x2j.converter.utils.X2JConstants.QUOT;
-import static com.x2j.converter.utils.X2JConstants.VALUE;
 import static com.x2j.converter.utils.X2JConstants.XPATH;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -25,10 +15,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.x2j.converter.excp.X2JException;
+import com.x2j.converter.mgr.handlers.X2JStringHandler;
+import com.x2j.converter.mgr.handlers.X2JStringHandlerFactory;
 import com.x2j.converter.utils.X2JErrorCodes;
 import com.x2j.converter.utils.X2JUtils;
 
@@ -46,8 +37,6 @@ import com.x2j.converter.utils.X2JUtils;
  */
 public class X2JConversionManager {
 
-	private Map<Character, String> splCharsMap;
-
 	private static class InstanceHolder {
 		private static final X2JConversionManager INSTANCE = new X2JConversionManager();
 	}
@@ -62,12 +51,6 @@ public class X2JConversionManager {
 	}
 
 	private X2JConversionManager() {
-		splCharsMap = new HashMap<Character, String>();
-		splCharsMap.put('<', LT);
-		splCharsMap.put('>', GT);
-		splCharsMap.put('\"', QUOT);
-		splCharsMap.put('\'', APOS);
-		splCharsMap.put('&', AMP);
 	}
 
 	/**
@@ -83,6 +66,9 @@ public class X2JConversionManager {
 	 */
 	public JSONObject processJSONObject(Element root) throws X2JException {
 		try {
+			if (X2JUtils.isVoid(root)) {
+				throw new JSONException("");
+			}
 			return XML.toJSONObject(X2JUtils.getString(root));
 		} catch (JSONException e) {
 			throw new X2JException(X2JErrorCodes.X2J_ERR_002);
@@ -122,27 +108,10 @@ public class X2JConversionManager {
 
 	private void processString(String key, String jsonValStr, Object obj, Element root, int index) throws X2JException {
 		if (!X2JUtils.isVoid(jsonValStr)) {
-			if (jsonValStr.startsWith(XPATH) || jsonValStr.startsWith(VALUE)) {
-				String xPath = jsonValStr.substring(jsonValStr.indexOf('(') + 1, jsonValStr.lastIndexOf(')'));
-				String xPathVal = "";
-				if (xPath.contains("@")) {
-					xPathVal = encodeText(X2JUtils.getXpathAttribute(root, xPath));
-				} else {
-					if (jsonValStr.startsWith(VALUE)) {
-						Element elem = X2JUtils.getXpathElement(root, xPath);
-						if (!X2JUtils.isVoid(elem)) {
-							Node child = elem.getFirstChild();
-							if (!X2JUtils.isVoid(child)) {
-								xPathVal = encodeText(child.getNodeValue());
-							}
-						}
-					} else {
-						xPathVal = encodeText(X2JUtils.getString(X2JUtils.getXpathElement(root, xPath)));
-					}
-				}
-				String dataType = determineDataType(jsonValStr);
-				setOrReplaceData(key, obj, index, xPathVal, dataType);
-			}
+			X2JStringHandler handler = X2JStringHandlerFactory.getInstance().getHandler(jsonValStr);
+			String xPathVal = handler.handleString(jsonValStr, root);
+			String dataType = determineDataType(jsonValStr);
+			setOrReplaceData(key, obj, index, xPathVal, dataType);
 		}
 	}
 
@@ -241,16 +210,6 @@ public class X2JConversionManager {
 				((JSONArray) obj).put(index, value);
 			}
 		}
-	}
-
-	private String encodeText(String text) {
-		if (X2JUtils.isVoid(text)) {
-			return "";
-		}
-		return IntStream.range(0, text.length()).mapToObj(i -> {
-			char c = (char) text.charAt(i);
-			return splCharsMap.containsKey(c) ? splCharsMap.get(c) : "" + c;
-		}).collect(Collectors.joining());
 	}
 
 }

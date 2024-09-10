@@ -150,8 +150,10 @@ public class X2JUtilsTest {
 
 	@Test
 	public void testReadXMLFromFileException() {
-		X2JException expected = assertThrows(X2JException.class, () -> X2JUtils
-				.getXmlFromFile(new File("src/test/java/com/x2j/converter/common/test/utils_test_input_1.xml")));
+		File file = new File("src/test/java/com/x2j/converter/common/test/utils_test_input_1.xml");
+		file.setReadable(false);
+		X2JException expected = assertThrows(X2JException.class, () -> X2JUtils.getXmlFromFile(file));
+		file.setReadable(true);
 		assertEquals(expected.getErrorMessage(), "Error while reading XML from file.");
 	}
 
@@ -340,6 +342,47 @@ public class X2JUtilsTest {
 		file.setWritable(false);
 		X2JException expected = assertThrows(X2JException.class, () -> X2JUtils.writeJsonToFile(json, file));
 		assertEquals(expected.getErrorMessage(), "Error while writing JSON to file.");
+	}
+
+	@Test
+	public void testBlankEncode() throws X2JException, IOException {
+		assertEquals(X2JUtils.encodeText(""), "");
+	}
+
+	@Test
+	public void testXPathValidation() {
+		String xpath = "abcd";
+		assertFalse(X2JUtils.isValidXPath(xpath));
+	}
+
+	@Test
+	public void testXPathValidationOne() {
+		String xpath = "/MyShipments/Shipment";
+		assertTrue(X2JUtils.isValidXPath(xpath));
+	}
+
+	@Test
+	public void testXPathValidationTwo() {
+		String xpath = "/MyShipments/Shipment/@Shipment_Key";
+		assertTrue(X2JUtils.isValidXPath(xpath));
+	}
+
+	@Test
+	public void testXPathValidationThree() {
+		String xpath = "";
+		assertFalse(X2JUtils.isValidXPath(xpath));
+	}
+
+	@Test
+	public void testXPathValidationFour() {
+		String xpath = null;
+		assertFalse(X2JUtils.isValidXPath(xpath));
+	}
+
+	@Test
+	public void testXPathValidationFive() {
+		String xpath = "/MyShipments/Shipment/#@Shipment_Key";
+		assertFalse(X2JUtils.isValidXPath(xpath));
 	}
 
 	@AfterClass

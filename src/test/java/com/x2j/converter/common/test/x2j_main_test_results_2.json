@@ -1,0 +1,72 @@
+{
+    "ShipmentIdentifier": "1202103301135561781564861",
+    "Type": "COD_SHP",
+    "LineItems": [
+        {
+            "Status": "113350",
+            "Field4": 528630,
+            "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
+            "Field2": 1000,
+            "Identifier": "I1",
+            "Description": "Shoes",
+            "Field3": "528630",
+            "Price": 150.99,
+            "Quantity": 1,
+            "TempOne": [
+                5,
+                {"Field6": "528630"}
+            ],
+            "Field1": "CONSTANT1"
+        },
+        {
+            "Status": "113351",
+            "Field4": 528630,
+            "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
+            "Field2": 1000,
+            "Identifier": "I2",
+            "Description": "Socks",
+            "Field3": "528630",
+            "Price": 75.5,
+            "Quantity": 2,
+            "TempOne": [
+                5,
+                {"Field6": "528630"}
+            ],
+            "Field1": "CONSTANT1"
+        },
+        {
+            "Status": "113353",
+            "Field4": 528630,
+            "TempTwo": {"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"},
+            "Field2": 1000,
+            "Identifier": "I3",
+            "Description": "Writing Pad",
+            "Field3": "528630",
+            "Price": 120,
+            "Quantity": 3,
+            "TempOne": [
+                5,
+                {"Field6": "528630"}
+            ],
+            "Field1": "CONSTANT1"
+        }
+    ],
+    "Temp": [
+        "Some Org Name",
+        1234,
+        "ABCD",
+        22268086,
+        1,
+        false,
+        [
+            2345,
+            "XYZ",
+            "20210330113201178156395"
+        ],
+        {"Comp": "Some Org Name"}
+    ],
+    "OrderTempInfo": "&lt;Order Order_Key=&quot;20210330113201178156395&quot; Order_Num=&quot;22268086&quot; Status=&quot;113350&quot; Status_Desc=&quot;Included In Shipment&quot; Type=&quot;COD_SHP&quot;/&gt;",
+    "OrderNo": "22268086",
+    "Carrier": "XYZ-ABCD Logistics",
+    "Info": {"1": "2"}
+}

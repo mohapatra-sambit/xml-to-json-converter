@@ -1,0 +1,47 @@
+{
+	"ShipmentIdentifier": "XPATH(/MyShipments/Shipment/@Shipment_Key)",
+	"Type": "XPATH(/MyShipments/Shipment/Lines/Line/Order/@Type)",
+	"OrderNo": "VALUE(/MyShipments/Shipment/Lines/Line/Order/@Order_Num)",
+	"Carrier": "XYZ-ABCD Logistics",
+	"LineItems" : [{
+		"recurrent_path": "/MyShipments/Shipment/Lines/Line",
+		"Identifier": "RECUR_ELEM(/Item/@Id)",
+		"Quantity": "RECUR_ELEM(/Item/@Qty):INT",
+		"Description": "RECUR_ELEM(/Item/@Desc)",
+		"Status": "RECUR_ELEM(/Order/@Status)",
+		"Price": "RECUR_ELEM(/Item/@Cost):DBL",
+		"Field1": "CONSTANT1",
+		"Field2": 1000,
+		"Field3": "XPATH(/MyShipments/Shipment/@Number)",
+		"Field4": "VALUE(/MyShipments/Shipment/@Number):INT",
+		"TempOne": [
+			5,
+			{
+				"Field6": "XPATH(/MyShipments/Shipment/@Number)"
+			}
+		],
+		"TempTwo": {
+			"StatusDescription": "RECUR_ELEM(/Order/@Status_Desc)"
+		}
+	}],
+	"Temp": [
+		"VALUE(/MyShipments/Shipment/Organization)", 
+		1234,
+		"ABCD",
+		"XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Num):INT",
+		"XPATH(/MyShipments/Shipment/Lines/Line/Item/@Qty):DBL",
+		"XPATH(/MyShipments/Shipment/@AttrOne):BOOL",
+		[
+			2345,
+			"XYZ",
+			"XPATH(/MyShipments/Shipment/Lines/Line/Order/@Order_Key)"
+		],
+		{
+			"Comp": "VALUE(/MyShipments/Shipment/Organization)"
+		}
+	],
+	"OrderTempInfo": "XPATH(/MyShipments/Shipment/Lines/Line/Order)",
+	"Info": {
+		"1": "2"
+	}
+}

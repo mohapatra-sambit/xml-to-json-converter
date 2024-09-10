@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,17 +33,27 @@ public class X2JConversionManagerTest {
 				.getJsonFromFile(new File("src/test/java/com/x2j/converter/common/test/conv_mgr_test_schema.json"));
 		JSONObject json = X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement());
 		assertEquals(json.get("ShipmentIdentifier"), "1202103301135561781564861");
-		assertEquals(json.get("Type"), "COD_SHP");
+		assertEquals(json.get("Type"), "COD");
 		assertEquals(json.get("OrderNo"), "22268086");
 		assertEquals(json.get("Carrier"), "XYZ-ABCD Logistics");
+		assertEquals(json.get("Temp2"), "abxyz,123");
+		assertEquals(json.get("Temp3"), "1222268086");
+		assertEquals(json.get("Temp8"), "13");
+		assertEquals(json.get("Temp6"), 4);
+		assertEquals(json.get("Temp11"), "INCLUDED IN SHIPMENT");
+		assertEquals(json.get("Temp15"), "included in shipment");
+		assertEquals(json.get("Temp21"), "ome Org Na");
 		assertEquals(((JSONArray) json.get("LineItems")).length(), 3);
 		assertEquals(((JSONObject) ((JSONArray) json.get("LineItems")).get(0)).get("Identifier"), "I1");
+		Map<String, String> temp = new HashMap<String, String>();
+		temp.put("Comp", "Some Org Name");
 		assertTrue(((JSONArray) json.get("Temp"))
-				.similar(new JSONArray(Arrays.asList("Some Org Name", 1234, "ABCD", "22268086"))));
+				.similar(new JSONArray(Arrays.asList("Some Org Name", 1234, "ABCD", 22268086, 1, true,
+						new JSONArray(Arrays.asList(2345, "XYZ", "20210330113201178156395")), new JSONObject(temp)))));
 	}
 
 	@Test
-	public void testXMLToJSONConversionException() throws Exception {
+	public void testXMLToJSONConversionExceptionOne() throws Exception {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/conv_mgr_test_input.xml");
@@ -50,6 +62,54 @@ public class X2JConversionManagerTest {
 		X2JException expected = assertThrows(X2JException.class,
 				() -> X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement()));
 		assertEquals(expected.getErrorMessage(), "Error while reading XML attribute value using XPaths.");
+	}
+
+	@Test
+	public void testXMLToJSONConversionExceptionTwo() throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/conv_mgr_test_input.xml");
+		JSONObject schema = X2JUtils
+				.getJsonFromFile(new File("src/test/java/com/x2j/converter/common/test/conv_mgr_test_schema_2.json"));
+		X2JException expected = assertThrows(X2JException.class,
+				() -> X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement()));
+		assertEquals(expected.getErrorMessage(), "Error while reading XML attribute value using XPaths.");
+	}
+
+	@Test
+	public void testXMLToJSONConversionExceptionThree() throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/conv_mgr_test_input.xml");
+		JSONObject schema = X2JUtils
+				.getJsonFromFile(new File("src/test/java/com/x2j/converter/common/test/conv_mgr_test_schema_3.json"));
+		X2JException expected = assertThrows(X2JException.class,
+				() -> X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement()));
+		assertEquals(expected.getErrorMessage(), "Error during string operation.");
+	}
+
+	@Test
+	public void testXMLToJSONConversionExceptionFour() throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/conv_mgr_test_input.xml");
+		JSONObject schema = X2JUtils
+				.getJsonFromFile(new File("src/test/java/com/x2j/converter/common/test/conv_mgr_test_schema_4.json"));
+		X2JException expected = assertThrows(X2JException.class,
+				() -> X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement()));
+		assertEquals(expected.getErrorMessage(), "Error during string operation.");
+	}
+
+	@Test
+	public void testXMLToJSONConversionExceptionFive() throws Exception {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse("src/test/java/com/x2j/converter/common/test/conv_mgr_test_input.xml");
+		JSONObject schema = X2JUtils
+				.getJsonFromFile(new File("src/test/java/com/x2j/converter/common/test/conv_mgr_test_schema_5.json"));
+		X2JException expected = assertThrows(X2JException.class,
+				() -> X2JConversionManager.getInstance().processJSONObject(schema, doc.getDocumentElement()));
+		assertEquals(expected.getErrorMessage(), "Error during string operation.");
 	}
 
 	@Test
@@ -74,7 +134,7 @@ public class X2JConversionManagerTest {
 	public void testXMLToJSONDefaultConversionException() {
 		X2JException expected = assertThrows(X2JException.class,
 				() -> X2JConversionManager.getInstance().processJSONObject(null));
-		assertEquals(expected.getErrorMessage(), "Error while converting XML element/document to String.");
+		assertEquals(expected.getErrorMessage(), "Error while reading JSON from file/string.");
 	}
 
 }

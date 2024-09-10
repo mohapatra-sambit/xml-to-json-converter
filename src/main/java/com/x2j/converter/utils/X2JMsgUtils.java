@@ -3,7 +3,8 @@ package com.x2j.converter.utils;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
-import java.util.stream.Stream;
+
+import com.x2j.converter.excp.X2JException;
 
 /**
  * A single instance utility class that reads the error messages properties file
@@ -32,10 +33,15 @@ public class X2JMsgUtils {
 	}
 
 	private X2JMsgUtils() {
-		reset();
+		try {
+			reset();
+		} catch (X2JException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 	}
 
-	private void loadMsgs() {
+	private void loadMsgs() throws X2JException {
 		loadDefaultMsgs();
 		loadExtendedMsgs();
 	}
@@ -57,17 +63,23 @@ public class X2JMsgUtils {
 		}
 	}
 
-	private void loadDefaultMsgs() {
+	private void loadDefaultMsgs() throws X2JException {
 		try {
 			msgs.load(X2JMsgUtils.class.getClassLoader().getResourceAsStream(MSGS_FILE_NAME));
 		} catch (Exception e) {
-			loadDefaultEnglishMsgs();
+			e.printStackTrace();
+			throw new X2JException(X2JErrorCodes.X2J_ERR_000);
 		}
 	}
 
-	private void loadDefaultEnglishMsgs() {
-		Stream.of(X2JErrorCodes.values())
-				.forEach(errCode -> msgs.setProperty(errCode.name(), errCode.getDefaultEnglishErrorMessage()));
+	/**
+	 * Reloads the messages object from the properties file.
+	 * 
+	 * @throws X2JException X2JException
+	 */
+	public void reset() throws X2JException {
+		msgs = new Properties();
+		loadMsgs();
 	}
 
 	/**
@@ -87,14 +99,6 @@ public class X2JMsgUtils {
 	 */
 	public Properties getMsgs() {
 		return msgs;
-	}
-
-	/**
-	 * Reloads the messages object from the properties file.
-	 */
-	public void reset() {
-		msgs = new Properties();
-		loadMsgs();
 	}
 
 }
